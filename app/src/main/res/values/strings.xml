@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">MyKotlinTestApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_login_fragment">Hello login fragment</string>
+    <string name="hello_sign_in_fragment">Hello signin fragment</string>
+    <string name="sign_in">Sign in</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="login2">Log in</string>
+    <string name="email">Email</string>
+    <string name="have_account">Already have an account?</string>
+
 </resources>
