@@ -1,8 +1,8 @@
 package ru.agalking.mykotlintestapp.views.loginflow
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import ru.agalking.mykotlintestapp.R
@@ -23,4 +23,6 @@ class LoginActivity : AppCompatActivity() {
     fun onSignInFragmentLoginButtonClicked(view: View) {
         navController.navigate(R.id.action_signInFragment_to_loginFragment)
     }
+
+
 }

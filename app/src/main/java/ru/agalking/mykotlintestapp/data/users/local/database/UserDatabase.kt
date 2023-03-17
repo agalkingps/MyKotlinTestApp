@@ -5,12 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.agalking.mykotlintestapp.data.users.local.dao.UserDao
-import ru.agalking.mykotlintestapp.data.users.local.entities.UserData
+import ru.agalking.mykotlintestapp.data.users.local.entities.User
 
 // UserDatabase represents database and contains the database holder and server the main access point for the underlying connection to your app's persisted, relational data.
 
 @Database(
-    entities = [UserData::class],
+    entities = [User::class],
     version = 1,                // <- Database version
     exportSchema = true
 )

@@ -1,31 +1,44 @@
 package ru.agalking.mykotlintestapp.repositories
 
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOn
 import ru.agalking.mykotlintestapp.data.users.local.dao.UserDao
-import ru.agalking.mykotlintestapp.data.users.local.entities.UserData
+import ru.agalking.mykotlintestapp.data.users.local.entities.User
 
 class UserRepository(private val userDao: UserDao) {
 
-    suspend fun getAllUsers(): Flow<List<UserData>> = userDao.readAllData()
-
-    suspend fun findUserByEmail(email: String): Flow<List<UserData>> = userDao.findByEmail(email)
-
-    suspend fun findUserByName(firstName: String, lastName: String): Flow<List<UserData>> = userDao.findByName(firstName, lastName)
-
-    suspend fun addUser(user: UserData) {
+    suspend fun addUser(user: User) {
         userDao.addUser(user)
     }
 
-    suspend fun updateUser(user: UserData) {
+    suspend fun updateUser(user: User) {
         userDao.updateUser(user)
     }
 
-    suspend fun deleteUser(user: UserData) {
+    suspend fun deleteUser(user: User) {
         userDao.deleteUser(user)
     }
 
-    suspend fun deleteAllUsers() {
-        userDao.deleteAllUsers()
-    }
+    suspend fun deleteAllUsers() = userDao.deleteAllUsers()
+
+    val getUserFlow: Flow<List<User>> get()
+        = userDao.getUserFlow()
+        .flowOn(Dispatchers.Default)
+        .conflate()
+
+    fun getUserFlowByEmail(email: String): Flow<List<User>>
+        = userDao.getUserFlowByEmail(email)
+        .flowOn(Dispatchers.Default)
+        .conflate()
+
+    fun getUserFlowByName(firstName: String, lastName: String): Flow<List<User>>
+        = userDao.getUserFlowByName(firstName, lastName)
+        .flowOn(Dispatchers.Default)
+        .conflate()
+
 }
+
+
