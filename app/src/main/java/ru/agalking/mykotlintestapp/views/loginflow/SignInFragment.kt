@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import ru.agalking.mykotlintestapp.R
 import ru.agalking.mykotlintestapp.databinding.FragmentSignInBinding
@@ -12,12 +13,13 @@ import ru.agalking.mykotlintestapp.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
 
-    private lateinit var viewModel: LoginViewModel
+    private val sharedViewModel: LoginViewModel by activityViewModels()
+//    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java] // query for a ProfileViewModel
+//        viewModel = ViewModelProvider(this)[LoginViewModel::class.java] // query for a ProfileViewModel
     }
 
     override fun onCreateView(
@@ -31,7 +33,7 @@ class SignInFragment : Fragment() {
             false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
-            currentUser = viewModel.getCurrentUser().value   // Attach your view model here
+            currentUser = sharedViewModel.getCurrentUser().value   // Attach your view model here
         }.root
     }
 
