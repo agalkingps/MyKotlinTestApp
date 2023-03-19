@@ -35,7 +35,7 @@ class LoginFragment : Fragment() {
             false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
-            currentUser = sharedViewModel.getCurrentUser().value   // Attach your view model here
+            viewModel = sharedViewModel
         }.root
     }
 

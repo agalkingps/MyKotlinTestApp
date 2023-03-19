@@ -4,9 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="ru.agalking.mykotlintestapp.utils.DataBindingAdaptersKt" />
+
         <variable
-            name="currentUser"
-            type="ru.agalking.mykotlintestapp.data.users.local.entities.User" />
+            name="viewModel"
+            type="ru.agalking.mykotlintestapp.views.loginflow.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +50,7 @@
             android:id="@+id/outlined_edit_text_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={currentUser.firstName}"/>
+            android:text="@={viewModel.currentUser.firstName}"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

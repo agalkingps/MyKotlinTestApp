@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import ru.agalking.mykotlintestapp.R
 import ru.agalking.mykotlintestapp.databinding.FragmentSignInBinding
@@ -27,14 +28,34 @@ class SignInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return FragmentSignInBinding.inflate(
+        val viewBinding = FragmentSignInBinding.inflate(
             inflater,
             container,
             false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
-            currentUser = sharedViewModel.getCurrentUser().value   // Attach your view model here
-        }.root
-    }
+            viewModel = sharedViewModel
+        }
 
+        viewBinding.signInButton.setOnClickListener {
+            if (viewBinding.editTextFirstName.text!!.isEmpty()) {
+                sharedViewModel.firstNameErrorMessage.value = getString(R.string.can_not_be_empty)
+            } else {
+                sharedViewModel.firstNameErrorMessage.value = ""
+                if (viewBinding.editTextLastName.text!!.isEmpty()) {
+                    sharedViewModel.lastNameErrorMessage.value = getString(R.string.can_not_be_empty)
+                } else {
+                    sharedViewModel.lastNameErrorMessage.value = ""
+                    if (viewBinding.editTextEmail.text!!.isEmpty() ||
+                        !android.util.Patterns.EMAIL_ADDRESS.matcher(viewBinding.editTextEmail.text).matches() ){
+                        sharedViewModel.emailErrorMessage.value = getString(R.string.email_is_not_valid)
+                    } else {
+                        sharedViewModel.emailErrorMessage.value = ""
+//                (activity as NavigationHost).navigateTo(ProductGridFragment(), false) // Navigate to the next Fragment
+                    }
+                }
+            }
+        }
+        return viewBinding.root
+    }
 }

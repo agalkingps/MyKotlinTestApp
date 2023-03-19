@@ -4,9 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="ru.agalking.mykotlintestapp.utils.DataBindingAdaptersKt" />
+
         <variable
-            name="currentUser"
-            type="ru.agalking.mykotlintestapp.data.users.local.entities.User" />
+            name="viewModel"
+            type="ru.agalking.mykotlintestapp.views.loginflow.LoginViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTextFirstName"
+        android:id="@+id/text_input_first_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,18 +43,20 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle">
+        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle"
+        app:errorEnabled="true"
+        app:errorText="@{viewModel.firstNameErrorMessage}" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/outlined_edit_text_first_name"
+            android:id="@+id/edit_text_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="@={currentUser.firstName}" />
+            android:text="@={viewModel.currentUser.firstName}" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTextLastName"
+        android:id="@+id/text_input_last_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,19 +67,21 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFirstName"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle">
+        app:layout_constraintTop_toBottomOf="@+id/text_input_first_name"
+        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle"
+        app:errorEnabled="true"
+        app:errorText="@{viewModel.lastNameErrorMessage}" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/outlined_edit_text_last_name"
+            android:id="@+id/edit_text_last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="@={currentUser.lastName}" />
+            android:text="@={viewModel.currentUser.lastName}" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTextEmail"
+        android:id="@+id/text_input_email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -85,14 +92,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLastName"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle">
+        app:layout_constraintTop_toBottomOf="@+id/text_input_last_name"
+        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle"
+        app:errorEnabled="true"
+        app:errorText="@{viewModel.emailErrorMessage}" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/outlined_edit_text_email"
+            android:id="@+id/edit_text_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={currentUser.email}" />
+            android:inputType="textEmailAddress"
+            android:text="@={viewModel.currentUser.email}" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -112,7 +122,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_email"
         app:layout_constraintVertical_bias="0.41" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -123,8 +133,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextEmail"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@+id/text_input_email"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_email"
         app:layout_constraintVertical_bias="0.04" />
 
     <Button

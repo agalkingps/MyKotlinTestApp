@@ -11,7 +11,12 @@ import ru.agalking.mykotlintestapp.repositories.UserRepository
 class LoginViewModel(application: Application): AndroidViewModel(application) {
     private val userRepository: UserRepository
     private var allUsers: MutableLiveData<User>? = null
-    private var currentUser: MutableLiveData<User> = MutableLiveData<User>(User())
+
+    public var currentUser: MutableLiveData<User> = MutableLiveData<User>(User())
+
+    public var firstNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    public var lastNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    public var emailErrorMessage: MutableLiveData<String> = MutableLiveData("")
 
 
     init {
@@ -61,10 +66,6 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
             user.value = userList.value?.get(0)
         }
         return user
-    }
-
-    fun getCurrentUser(): LiveData<User> {
-        return currentUser
     }
 
     fun signInNewUser(user: User) : Boolean {
