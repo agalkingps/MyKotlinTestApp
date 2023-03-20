@@ -32,29 +32,31 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTextFirstName"
+        android:id="@+id/text_input_email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="42dp"
         android:layout_marginTop="60dp"
         android:layout_marginRight="42dp"
-        android:hint="@string/first_name"
+        android:hint="@string/email"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle">
+        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle"
+        app:errorEnabled="true"
+        app:errorText="@{viewModel.emailErrorMessage}" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/outlined_edit_text_first_name"
+            android:id="@+id/edit_text_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={viewModel.currentUser.firstName}"/>
+            android:text="@={viewModel.currentUser.email}"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editPassword"
+        android:id="@+id/text_input_password"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -65,15 +67,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFirstName"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_email"
         app:passwordToggleEnabled="true"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle">
+        app:shapeAppearanceOverlay="@style/TextInputLayoutStyle"
+        app:errorEnabled="true"
+        app:errorText="@{viewModel.passwordErrorMessage}" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/outlined_edit_text_password"
+            android:id="@+id/edit_text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="@={viewModel.currentUser.password}"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -92,7 +98,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_password"
         app:layout_constraintVertical_bias="0.575" />
 
 

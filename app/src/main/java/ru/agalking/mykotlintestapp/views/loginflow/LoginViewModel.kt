@@ -17,6 +17,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     public var firstNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
     public var lastNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
     public var emailErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    public var passwordErrorMessage: MutableLiveData<String> = MutableLiveData("")
 
 
     init {

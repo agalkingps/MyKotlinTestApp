@@ -29,14 +29,47 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return FragmentLoginBinding.inflate(
+        val viewBinding =  FragmentLoginBinding.inflate(
             inflater,
             container,
             false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
-        }.root
+        }
+/*
+        viewBinding.loginButton.setOnClickListener {
+            if (viewBinding.editTextEmail.text!!.isEmpty() ||
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(viewBinding.editTextEmail.text).matches() ){
+                sharedViewModel.emailErrorMessage.value = getString(R.string.email_is_not_valid)
+            } else {
+                sharedViewModel.emailErrorMessage.value = ""
+                if (viewBinding.editTextPassword.text != null &&
+                    viewBinding.editTextPassword.text!!.length < 8) {
+                    sharedViewModel.passwordErrorMessage.value = getString(R.string.password_is_ot_valid)
+                } else {
+                    sharedViewModel.passwordErrorMessage.value = ""
+                }
+            }
+        }
+*/
+        viewBinding.loginButton.setOnClickListener {
+            if (sharedViewModel.currentUser.value == null ||
+                sharedViewModel.currentUser.value!!.email.isEmpty() ||
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(sharedViewModel.currentUser.value!!.email).matches() ){
+                sharedViewModel.emailErrorMessage.value = getString(R.string.email_is_not_valid)
+            } else {
+                sharedViewModel.emailErrorMessage.value = ""
+                if (sharedViewModel.currentUser.value!!.password!!.length < 8) {
+                    sharedViewModel.passwordErrorMessage.value = getString(R.string.password_is_ot_valid)
+                } else {
+                    sharedViewModel.passwordErrorMessage.value = ""
+                }
+            }
+        }
+
+
+        return viewBinding.root
     }
 
 }

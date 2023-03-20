@@ -36,7 +36,7 @@ class SignInFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
         }
-
+/*
         viewBinding.signInButton.setOnClickListener {
             if (viewBinding.editTextFirstName.text!!.isEmpty()) {
                 sharedViewModel.firstNameErrorMessage.value = getString(R.string.can_not_be_empty)
@@ -56,6 +56,28 @@ class SignInFragment : Fragment() {
                 }
             }
         }
+*/
+        viewBinding.signInButton.setOnClickListener {
+            if (sharedViewModel.currentUser.value == null ||
+                sharedViewModel.currentUser.value!!.firstName.isEmpty()) {
+                sharedViewModel.firstNameErrorMessage.value = getString(R.string.can_not_be_empty)
+            } else {
+                sharedViewModel.firstNameErrorMessage.value = ""
+                if (sharedViewModel.currentUser.value!!.lastName.isEmpty()) {
+                    sharedViewModel.lastNameErrorMessage.value = getString(R.string.can_not_be_empty)
+                } else {
+                    sharedViewModel.lastNameErrorMessage.value = ""
+                    if (sharedViewModel.currentUser.value!!.email.isEmpty() ||
+                        !android.util.Patterns.EMAIL_ADDRESS.matcher(sharedViewModel.currentUser.value!!.email).matches() ){
+                        sharedViewModel.emailErrorMessage.value = getString(R.string.email_is_not_valid)
+                    } else {
+                        sharedViewModel.emailErrorMessage.value = ""
+//                (activity as NavigationHost).navigateTo(ProductGridFragment(), false) // Navigate to the next Fragment
+                    }
+                }
+            }
+        }
+
         return viewBinding.root
     }
 }

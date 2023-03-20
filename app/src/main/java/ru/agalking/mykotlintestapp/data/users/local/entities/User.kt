@@ -16,11 +16,12 @@ data class User(
     @ColumnInfo(name = "last_name")
     var lastName: String,
     var email: String,
+    var password: String,
     @ColumnInfo(name = "balance")
     var balance: Double,
     @ColumnInfo(name = "photo_url")
     var photo: String?,
 ) {
-    constructor() : this(-1, "", "", "", 0.0, "") {
+    constructor() : this(-1, "", "", "", "", 0.0, "") {
     }
 }
