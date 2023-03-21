@@ -8,7 +8,7 @@ import ru.agalking.mykotlintestapp.data.users.local.database.UserDatabase
 import ru.agalking.mykotlintestapp.data.users.local.entities.User
 import ru.agalking.mykotlintestapp.repositories.UserRepository
 
-class LoginViewModel(application: Application): AndroidViewModel(application) {
+class LoginFlowViewModel(application: Application): AndroidViewModel(application) {
     private val userRepository: UserRepository
     private var allUsers: MutableLiveData<User>? = null
 

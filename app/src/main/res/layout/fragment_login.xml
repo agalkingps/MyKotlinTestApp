@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="ru.agalking.mykotlintestapp.views.loginflow.LoginViewModel" />
+            type="ru.agalking.mykotlintestapp.views.loginflow.LoginFlowViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
