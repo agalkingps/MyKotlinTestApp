@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ru.agalking.mykotlintestapp.R
 import ru.agalking.mykotlintestapp.data.users.local.entities.User
 import ru.agalking.mykotlintestapp.databinding.FragmentLoginBinding
@@ -44,6 +45,7 @@ class LoginFragment : Fragment() {
             if (inputCheck()) {
                 sharedViewModel.currentUser.value = User()
                 sharedViewModel.logInNewUser(sharedViewModel.currentUser.value!!)
+                findNavController().navigate(R.id.action_signInFragment_to_userListFragment)
             }
         }
         return viewBinding.root

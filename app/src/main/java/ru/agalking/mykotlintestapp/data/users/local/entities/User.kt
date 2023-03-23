@@ -1,5 +1,7 @@
 package ru.agalking.mykotlintestapp.data.users.local.entities
 
+
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -10,18 +12,14 @@ import androidx.room.PrimaryKey
                     Index(value = ["first_name", "last_name"])])
 data class User(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
-    @ColumnInfo(name = "first_name")
-    var firstName: String,
-    @ColumnInfo(name = "last_name")
-    var lastName: String,
-    var email: String,
-    var password: String,
-    @ColumnInfo(name = "balance")
-    var balance: Double,
+    var id: Int=0,
+    @NonNull @ColumnInfo(name = "first_name")
+    var firstName: String="",
+    @NonNull @ColumnInfo(name = "last_name")
+    var lastName: String="",
+    @NonNull var email: String="",
+    var password: String="",
+    @NonNull var balance: Double=0.0,
     @ColumnInfo(name = "photo_url")
-    var photo: String?,
-) {
-    constructor() : this(-1, "", "", "", "", 0.0, "") {
-    }
-}
+    var photoUrl: String?=null
+)

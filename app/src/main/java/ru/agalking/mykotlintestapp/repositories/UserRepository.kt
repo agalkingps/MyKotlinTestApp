@@ -26,17 +26,17 @@ class UserRepository(private val userDao: UserDao) {
 
     val getUserFlow: Flow<List<User>> get()
         = userDao.getUserFlow()
-        .flowOn(Dispatchers.Default)
+        .flowOn(Dispatchers.IO)
         .conflate()
 
     fun getUserFlowByEmail(email: String): Flow<List<User>>
         = userDao.getUserFlowByEmail(email)
-        .flowOn(Dispatchers.Default)
+        .flowOn(Dispatchers.IO)
         .conflate()
 
     fun getUserFlowByName(firstName: String, lastName: String): Flow<List<User>>
         = userDao.getUserFlowByName(firstName, lastName)
-        .flowOn(Dispatchers.Default)
+        .flowOn(Dispatchers.IO)
         .conflate()
 
 }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ru.agalking.mykotlintestapp.R
 import ru.agalking.mykotlintestapp.data.users.local.entities.User
 import ru.agalking.mykotlintestapp.databinding.FragmentSignInBinding
@@ -18,13 +19,7 @@ class SignInFragment : Fragment() {
     private val sharedViewModel: LoginFlowViewModel by activityViewModels()
 //    private lateinit var viewModel: LoginViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        viewModel = ViewModelProvider(this)[LoginViewModel::class.java] // query for a ProfileViewModel
-    }
-
-    override fun onCreateView(
+   override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,8 +35,11 @@ class SignInFragment : Fragment() {
         viewBinding.signInButton.setOnClickListener {
             if (inputCheck()) {
                 sharedViewModel.signInNewUser(sharedViewModel.currentUser.value!!)
-//                (activity as NavigationHost).navigateTo(ProductGridFragment(), false) // Navigate to the next Fragment
+                findNavController().navigate(R.id.action_signInFragment_to_userListFragment)
             }
+        }
+        viewBinding.loginButton.setOnClickListener {
+            findNavController().navigate(R.id.action_signInFragment_to_loginFragment)
         }
         return viewBinding.root
     }

@@ -3,6 +3,7 @@ package ru.agalking.mykotlintestapp.views.loginflow
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ru.agalking.mykotlintestapp.data.users.local.database.UserDatabase
 import ru.agalking.mykotlintestapp.data.users.local.entities.User
@@ -10,19 +11,19 @@ import ru.agalking.mykotlintestapp.repositories.UserRepository
 
 class LoginFlowViewModel(application: Application): AndroidViewModel(application) {
     private val userRepository: UserRepository
-    private var allUsers: MutableLiveData<User>? = null
 
-    public var currentUser: MutableLiveData<User> = MutableLiveData<User>(User())
+    var currentUser: MutableLiveData<User> = MutableLiveData<User>(User())
 
-    public var firstNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
-    public var lastNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
-    public var emailErrorMessage: MutableLiveData<String> = MutableLiveData("")
-    public var passwordErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    var firstNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    var lastNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    var emailErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    var passwordErrorMessage: MutableLiveData<String> = MutableLiveData("")
 
 
     init {
         val userDao = UserDatabase.getDatabase(application).userDao()
         userRepository= UserRepository(userDao)
+//        deleteAllUsers()
     }
 
     fun addUser(user: User) {
@@ -49,7 +50,7 @@ class LoginFlowViewModel(application: Application): AndroidViewModel(application
         }
     }
 
-    fun getAllUsers(): LiveData<List<User>> = userRepository.getUserFlow.asLiveData()
+    fun getAllUsers() : Flow<List<User>> = userRepository.getUserFlow
 
     fun getUserByEmail(email: String): LiveData<User?> {
         val userList: LiveData<List<User?>> = userRepository.getUserFlowByEmail(email).asLiveData()
