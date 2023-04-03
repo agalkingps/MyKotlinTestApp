@@ -1,57 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rowLayout"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="24sp">
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/text_view_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="1"
         android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173" />
+        android:layout_margin="4dp"
+        android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/text_view_firstName"
-        android:layout_width="95dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="24dp"
-        android:text="John"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_view_id"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_view_lastName"
-        android:layout_width="177dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="24dp"
-        android:text="Doe"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_view_firstName"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
+        <TextView
+            android:id="@+id/text_view_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/text_view_email"
-        android:layout_width="292dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="41dp"
-        android:text="doe@mail.com"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/text_view_firstName"
-        app:layout_constraintTop_toTopOf="@+id/text_view_firstName" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/text_view_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="doe@mail.com"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

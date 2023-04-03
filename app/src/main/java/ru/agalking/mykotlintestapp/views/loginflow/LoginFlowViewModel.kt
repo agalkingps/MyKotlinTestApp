@@ -3,6 +3,7 @@ package ru.agalking.mykotlintestapp.views.loginflow
 import android.app.Application
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ru.agalking.mykotlintestapp.data.users.local.database.UserDatabase
@@ -27,6 +28,7 @@ class LoginFlowViewModel(application: Application): AndroidViewModel(application
     }
 
     fun addUser(user: User) {
+        user.id = 0
         viewModelScope.launch(Dispatchers.IO) {
             userRepository.addUser(user)
         }
@@ -52,14 +54,8 @@ class LoginFlowViewModel(application: Application): AndroidViewModel(application
 
     fun getAllUsers() : Flow<List<User>> = userRepository.getUserFlow
 
-    fun getUserByEmail(email: String): LiveData<User?> {
-        val userList: LiveData<List<User?>> = userRepository.getUserFlowByEmail(email).asLiveData()
-        val user = MutableLiveData<User?>()
-        if (userList.value?.isEmpty() == false) {
-            user.value = userList.value?.get(0)
-        }
-        return user
-    }
+    suspend fun getUserByEmail(email: String): User? =
+            userRepository.getUserByEmail(email)
 
     fun getUserByName(firstName: String, lastName: String): LiveData<User?> {
         val userList: LiveData<List<User?>> = userRepository.getUserFlowByName(firstName, lastName).asLiveData()
@@ -85,15 +81,27 @@ class LoginFlowViewModel(application: Application): AndroidViewModel(application
         return false
     }
 
-    fun logInNewUser(user: User) : Boolean {
-        if (getUserByEmail(user.email).isInitialized) {
-            if (currentUser == null) {
-                currentUser = MutableLiveData<User>()
+    fun logInUser(user: User): Boolean {
+        var res: Boolean = false
+
+        viewModelScope.launch {
+            val foundUser = getUserByEmail(user.email)
+            if (foundUser != null) {
+                currentUser.value = foundUser!!
+                res = true
             }
-            currentUser?.value = user
-            return true
         }
-        return false
+        return res
     }
 
 }
+/*
+viewModelScope.launch {
+    tapCount++
+    // suspend this coroutine for one second
+    delay(1_000)
+    // resume in the main dispatcher
+    // _snackbar.value can be called directly from main thread
+    _taps.postValue("$tapCount taps")
+}
+*/

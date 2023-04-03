@@ -9,7 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.agalking.mykotlintestapp.R
 import ru.agalking.mykotlintestapp.data.users.local.entities.User
 import ru.agalking.mykotlintestapp.databinding.FragmentLoginBinding
@@ -19,13 +24,8 @@ class LoginFragment : Fragment() {
     // ViewModel shared between the activity and its fragments
     private val sharedViewModel: LoginFlowViewModel by activityViewModels()
 
-//    private lateinit var viewModel: LoginViewModel
-
    override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
-
-         // ViewModel specific for th Activity
-//       viewModel = ViewModelProvider(this)[LoginViewModel::class.java] // query for a ProfileViewModel
    }
 
     override fun onCreateView(
@@ -43,9 +43,16 @@ class LoginFragment : Fragment() {
         }
         viewBinding.loginButton.setOnClickListener {
             if (inputCheck()) {
-                sharedViewModel.currentUser.value = User()
-                sharedViewModel.logInNewUser(sharedViewModel.currentUser.value!!)
-                findNavController().navigate(R.id.action_signInFragment_to_userListFragment)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val email: String = sharedViewModel.currentUser.value!!.email
+                    var foundUser = sharedViewModel.getUserByEmail(email)
+                    if (foundUser != null) {
+                        withContext(Dispatchers.Main) {
+                            sharedViewModel.currentUser.value = foundUser!!
+                            findNavController().navigate(R.id.action_loginFragment_to_userListFragment)
+                        }
+                    }
+                }
             }
         }
         return viewBinding.root

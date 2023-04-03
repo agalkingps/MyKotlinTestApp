@@ -8,7 +8,8 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table", // User Entity represents a table within the database.
-        indices = [ Index("email", unique = true),
+        indices = [
+                    Index("email", unique = true),
                     Index(value = ["first_name", "last_name"])])
 data class User(
     @PrimaryKey(autoGenerate = true)

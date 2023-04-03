@@ -1,6 +1,7 @@
 package ru.agalking.mykotlintestapp.repositories
 
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -29,10 +30,8 @@ class UserRepository(private val userDao: UserDao) {
         .flowOn(Dispatchers.IO)
         .conflate()
 
-    fun getUserFlowByEmail(email: String): Flow<List<User>>
-        = userDao.getUserFlowByEmail(email)
-        .flowOn(Dispatchers.IO)
-        .conflate()
+    fun getUserByEmail(email: String): User?
+        = userDao.getUserByEmail(email)
 
     fun getUserFlowByName(firstName: String, lastName: String): Flow<List<User>>
         = userDao.getUserFlowByName(firstName, lastName)

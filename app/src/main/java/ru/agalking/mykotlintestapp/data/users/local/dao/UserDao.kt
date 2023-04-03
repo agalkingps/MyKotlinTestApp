@@ -22,8 +22,8 @@ interface UserDao {
     @Query("SELECT * FROM user_table ORDER BY id ASC")
     fun getUserFlow(): Flow<List<User>>
 
-    @Query("SELECT * FROM user_table WHERE email = :search")
-    fun getUserFlowByEmail(search: String): Flow<List<User>>
+    @Query("SELECT * FROM user_table WHERE email = :email")
+    fun getUserByEmail(email: String): User?
 
     @Query("SELECT * FROM user_table WHERE first_name = :firstName  AND last_name = :lastName")
     fun getUserFlowByName(firstName: String, lastName: String): Flow<List<User>>

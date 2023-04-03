@@ -48,8 +48,7 @@ class UserListAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             binding.textViewId.text = user.id.toString()
-            binding.textViewFirstName.text = user.firstName
-            binding.textViewLastName.text = user.lastName
+            binding.textViewName.text = user.firstName + " " + user.lastName
             binding.textViewEmail.text = user.email
         }
     }
