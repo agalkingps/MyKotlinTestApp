@@ -11,33 +11,29 @@ import ru.agalking.mykotlintestapp.data.users.local.entities.User
 
 class UserRepository(private val userDao: UserDao) {
 
-    suspend fun addUser(user: User) {
-        userDao.addUser(user)
+    suspend fun addUser(user: User) : Long {
+        return userDao.addUser(user)
     }
 
-    suspend fun updateUser(user: User) {
-        userDao.updateUser(user)
+    suspend fun updateUser(user: User) : Int {
+        return userDao.updateUser(user)
     }
 
-    suspend fun deleteUser(user: User) {
-        userDao.deleteUser(user)
+    suspend fun deleteUser(user: User) : Int {
+        return userDao.deleteUser(user)
     }
 
-    suspend fun deleteAllUsers() = userDao.deleteAllUsers()
+    suspend fun deleteAllUsers() : Int {
+        return userDao.deleteAllUsers()
+    }
 
-    val getUserFlow: Flow<List<User>> get()
-        = userDao.getUserFlow()
+    val getAllUsers: Flow<List<User>> get()
+        = userDao.getAllUsers()
         .flowOn(Dispatchers.IO)
         .conflate()
 
     fun getUserByEmail(email: String): User?
         = userDao.getUserByEmail(email)
-
-    fun getUserFlowByName(firstName: String, lastName: String): Flow<List<User>>
-        = userDao.getUserFlowByName(firstName, lastName)
-        .flowOn(Dispatchers.IO)
-        .conflate()
-
-}
+ }
 
 

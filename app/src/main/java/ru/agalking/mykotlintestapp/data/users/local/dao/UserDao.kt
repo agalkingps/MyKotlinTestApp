@@ -8,24 +8,20 @@ import ru.agalking.mykotlintestapp.data.users.local.entities.User
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUser(user: User)
+    suspend fun addUser(user: User) : Long
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun updateUser(user: User) : Int
 
     @Delete
-    suspend fun deleteUser(user: User)
+    suspend fun deleteUser(user: User) : Int
 
     @Query("DELETE FROM user_table")
-    suspend fun deleteAllUsers()
+    suspend fun deleteAllUsers() : Int
 
     @Query("SELECT * FROM user_table ORDER BY id ASC")
-    fun getUserFlow(): Flow<List<User>>
+    fun getAllUsers(): Flow<List<User>>
 
     @Query("SELECT * FROM user_table WHERE email = :email")
     fun getUserByEmail(email: String): User?
-
-    @Query("SELECT * FROM user_table WHERE first_name = :firstName  AND last_name = :lastName")
-    fun getUserFlowByName(firstName: String, lastName: String): Flow<List<User>>
-
 }

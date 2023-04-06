@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -41,37 +43,26 @@ class LoginFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
         }
+
         viewBinding.loginButton.setOnClickListener {
-            if (inputCheck()) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val email: String = sharedViewModel.currentUser.value!!.email
-                    var foundUser = sharedViewModel.getUserByEmail(email)
-                    if (foundUser != null) {
-                        withContext(Dispatchers.Main) {
-                            sharedViewModel.currentUser.value = foundUser!!
-                            findNavController().navigate(R.id.action_loginFragment_to_userListFragment)
-                        }
-                    }
-                }
-            }
+            sharedViewModel.loginUser(sharedViewModel.currentUser.value!!)
         }
+
+        sharedViewModel.loginCompletion.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                findNavController().navigate(R.id.action_loginFragment_to_userListFragment)
+                sharedViewModel.loginCompletion.value = false
+            }
+        })
+
+        sharedViewModel.statusMessage.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
+            }
+        })
+
         return viewBinding.root
     }
 
-    private fun inputCheck(): Boolean {
-        if (sharedViewModel.currentUser.value == null ||
-            sharedViewModel.currentUser.value!!.email.isEmpty() ||
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(sharedViewModel.currentUser.value!!.email).matches() ){
-            sharedViewModel.emailErrorMessage.value = getString(R.string.email_is_not_valid)
-        } else {
-            sharedViewModel.emailErrorMessage.value = ""
-            if (sharedViewModel.currentUser.value!!.password!!.length < 8) {
-                sharedViewModel.passwordErrorMessage.value = getString(R.string.password_is_ot_valid)
-            } else {
-                sharedViewModel.passwordErrorMessage.value = ""
-                return true
-            }
-        }
-        return  false
-    }
+
 }

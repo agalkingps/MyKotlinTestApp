@@ -1,37 +1,38 @@
 package ru.agalking.mykotlintestapp.views.loginflow
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.*
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.agalking.mykotlintestapp.R
 import ru.agalking.mykotlintestapp.data.users.local.database.UserDatabase
 import ru.agalking.mykotlintestapp.data.users.local.entities.User
 import ru.agalking.mykotlintestapp.repositories.UserRepository
+import ru.agalking.mykotlintestapp.utils.Event
 
 class LoginFlowViewModel(application: Application): AndroidViewModel(application) {
     private val userRepository: UserRepository
+    private val appContext: Context = application
 
-    var currentUser: MutableLiveData<User> = MutableLiveData<User>(User())
+    var currentUser = MutableLiveData<User>(User())
+    val statusMessage = MutableLiveData<Event<String>>()
+    val signInCompletion = MutableLiveData<Boolean>(false)
+    val loginCompletion = MutableLiveData<Boolean>(false)
 
-    var firstNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
-    var lastNameErrorMessage: MutableLiveData<String> = MutableLiveData("")
-    var emailErrorMessage: MutableLiveData<String> = MutableLiveData("")
-    var passwordErrorMessage: MutableLiveData<String> = MutableLiveData("")
+    var firstNameErrorMessage = MutableLiveData<String>("")
+    var lastNameErrorMessage = MutableLiveData<String>("")
+    var emailErrorMessage = MutableLiveData<String>("")
+    var passwordErrorMessage = MutableLiveData<String>("")
 
 
     init {
         val userDao = UserDatabase.getDatabase(application).userDao()
         userRepository= UserRepository(userDao)
-//        deleteAllUsers()
-    }
-
-    fun addUser(user: User) {
-        user.id = 0
-        viewModelScope.launch(Dispatchers.IO) {
-            userRepository.addUser(user)
-        }
     }
 
     fun updateUser(user: User) {
@@ -52,56 +53,101 @@ class LoginFlowViewModel(application: Application): AndroidViewModel(application
         }
     }
 
-    fun getAllUsers() : Flow<List<User>> = userRepository.getUserFlow
+    fun getAllUsers() : Flow<List<User>> = userRepository.getAllUsers
 
-    suspend fun getUserByEmail(email: String): User? =
+    fun getUserByEmail(email: String): User? =
             userRepository.getUserByEmail(email)
 
-    fun getUserByName(firstName: String, lastName: String): LiveData<User?> {
-        val userList: LiveData<List<User?>> = userRepository.getUserFlowByName(firstName, lastName).asLiveData()
-        val user = MutableLiveData<User?>()
-        if (userList.value?.isEmpty() == false) {
-            user.value = userList.value?.get(0)
+    fun signInNewUser(user: User) {
+        try {
+            if (signInInputCheck()) {
+                viewModelScope.launch(Dispatchers.IO) {
+                    user.id = 0
+                    val newRowId: Long = userRepository.addUser(user)
+                    withContext(Dispatchers.Main) {
+                        if (newRowId > -1) {
+                            if (currentUser == null) {
+                                currentUser = MutableLiveData<User>()
+                            }
+                            currentUser?.value = user
+                            signInCompletion.value = true
+                        }
+                        else {
+                            statusMessage.value = Event("Error Occurred")
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            statusMessage.value = Event("Error Occurred")
+            e.printStackTrace()
         }
-        return user
     }
 
-    fun signInNewUser(user: User) : Boolean {
+    fun loginUser(user: User) {
         try {
-            addUser(user)
-            if (currentUser == null) {
-                currentUser = MutableLiveData<User>()
+            if (loginInputCheck()) {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val email: String = currentUser.value!!.email
+                    var foundUser = getUserByEmail(email)
+                    withContext(Dispatchers.Main) {
+                        if (foundUser != null) {
+                            currentUser.value = foundUser!!
+                            loginCompletion.value = true
+                        }
+                        else {
+                            statusMessage.value = Event("Error Occurred")
+                        }
+                    }
+                }
             }
-            currentUser?.value = user
-            return true
         } catch (e: Exception) {
+            statusMessage.value = Event("Error Occurred")
             e.printStackTrace()
-            //Код, который выполняется при возникновении исключения
+        }
+
+    }
+
+    private fun signInInputCheck(): Boolean {
+        if (currentUser.value == null ||
+            currentUser.value!!.firstName.isEmpty()
+        ) {
+            firstNameErrorMessage.value = appContext.getString(R.string.can_not_be_empty)
+        } else {
+            firstNameErrorMessage.value = ""
+            if (currentUser.value!!.lastName.isEmpty()) {
+                lastNameErrorMessage.value = appContext.getString(R.string.can_not_be_empty)
+            } else {
+                lastNameErrorMessage.value = ""
+                if (currentUser.value!!.email.isEmpty() ||
+                    !android.util.Patterns.EMAIL_ADDRESS.matcher(currentUser.value!!.email)
+                        .matches()
+                ) {
+                    emailErrorMessage.value = appContext.getString(R.string.email_is_not_valid)
+                } else {
+                    emailErrorMessage.value = ""
+                    return true
+                }
+            }
         }
         return false
     }
 
-    fun logInUser(user: User): Boolean {
-        var res: Boolean = false
-
-        viewModelScope.launch {
-            val foundUser = getUserByEmail(user.email)
-            if (foundUser != null) {
-                currentUser.value = foundUser!!
-                res = true
+    private fun loginInputCheck(): Boolean {
+        if (currentUser.value == null ||
+            currentUser.value!!.email.isEmpty() ||
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(currentUser.value!!.email).matches() ){
+            emailErrorMessage.value = appContext.getString(R.string.email_is_not_valid)
+        } else {
+            emailErrorMessage.value = ""
+            if (currentUser.value!!.password!!.length < 8) {
+                passwordErrorMessage.value = appContext.getString(R.string.password_is_ot_valid)
+            } else {
+                passwordErrorMessage.value = ""
+                return true
             }
         }
-        return res
+        return  false
     }
 
 }
-/*
-viewModelScope.launch {
-    tapCount++
-    // suspend this coroutine for one second
-    delay(1_000)
-    // resume in the main dispatcher
-    // _snackbar.value can be called directly from main thread
-    _taps.postValue("$tapCount taps")
-}
-*/
